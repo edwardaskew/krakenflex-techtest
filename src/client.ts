@@ -1,4 +1,4 @@
-import { IClient, Outage, SiteInfo, EnhancedOutage } from "./interface";
+import { IClient, Outage, SiteInfo, EnhancedOutage } from "./interfaces";
 import axios, { Axios } from "axios";
 
 export class Client implements IClient {
@@ -22,8 +22,9 @@ export class Client implements IClient {
         const response = await this._axios.get<SiteInfo>(`/site-info/${id}`);
         return response.data;
     }
-    async postSiteOutages(id: string, outages: EnhancedOutage[]): Promise<void> {
-        await this._axios.post(`/site-outages/${id}`, { data: outages });
+    async postSiteOutages(id: string, outages: EnhancedOutage[]): Promise<any> {
+        const response = await this._axios.post(`/site-outages/${id}`, outages);
+        return response.data;
     }
 
 }

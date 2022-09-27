@@ -1,6 +1,6 @@
-import { EnhancedOutage, IClient, Outage } from "client";
+import { EnhancedOutage, IClient, Outage } from "interfaces";
 
-export async function main(client: IClient, args: {begin: string, siteId: string, dryRun: boolean}) {
+export async function main(client: IClient, args: {begin: string, siteId: string, dryRun: boolean}, logger=console.log.bind(console)) {
 
     // 1. Retrieve all outages from the `GET /outages` endpoint
     const outages = await client.getOutages();
@@ -18,20 +18,20 @@ export async function main(client: IClient, args: {begin: string, siteId: string
 
     // 5. Send this list of outages to `POST /site-outages/{siteId}` for the site with the ID `args.siteId`
     if(args.dryRun) {
-        console.log(JSON.stringify(enhancedOutages, null, 4));
+        logger(JSON.stringify(enhancedOutages, null, 4));
     }
     else {
         await client.postSiteOutages(args.siteId, enhancedOutages);
     }
 }
 
-function filterOutages(outages: Outage[], devices: Map<string, string>, begin: string): Outage[]
+export function filterOutages(outages: Outage[], devices: Map<string, string>, begin: string): Outage[]
 {
     // This relies on lexographic ordering of ISO 8601 strings also ordering sequentially by time
     return outages.filter(o => o.begin >= begin && devices.has(o.id))
 }
 
-function enhanceOutages(outages: Outage[], devices: Map<string,string>): EnhancedOutage[]
+export function enhanceOutages(outages: Outage[], devices: Map<string,string>): EnhancedOutage[]
 {
     return outages.map(o => ({...o, name: devices.get(o.id)}));
 }
