@@ -1,4 +1,5 @@
 import yargs from "yargs/yargs";
+import { Argv } from "yargs";
 
 export interface ICommandLineArgs {
     apiKey: string;
@@ -6,9 +7,10 @@ export interface ICommandLineArgs {
     siteId: string;
     baseUrl: string;
     dryRun: boolean;
+    retries: number
 }
 
-export const parser = yargs()
+export const parser: Argv<ICommandLineArgs> = yargs()
     .usage("$0 [options] -k <API_KEY>")
     .version()
     .option("apiKey", {
@@ -38,6 +40,11 @@ export const parser = yargs()
         description: "Prevents any portentially non-idempotent http methods (in this case the final POST) from executing, instead printing the body that would be sent to the console",
         type: "boolean",
         default: false
+    })
+    .option("retries", {
+        alias: "r",
+        description: "Maximum number of retries to attempt if an http request returns a 500 error code (only applied to http requests which should be idempotent)",
+        default: 3
     })
     .strict()
     .help()

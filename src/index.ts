@@ -4,6 +4,6 @@ import { Client } from "./client";
 
 
 const args = parseArgs(process.argv.slice(2));
-const client = new Client(args.apiKey, args.baseUrl);
+const client = new Client(args.apiKey, args.baseUrl, args.retries);
 
 main(client, args);
