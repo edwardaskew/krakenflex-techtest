@@ -4,7 +4,6 @@ import chai, { expect } from "chai";
 import chaiAsPromised from "chai-as-promised";
 chai.use(chaiAsPromised);
 import sinon from "sinon";
-import exp from "constants";
 
 describe("retry", () => {
     it("should retry an async function a maximum number of times if it fails", async () => {
