@@ -7,17 +7,16 @@ import axios, { Axios } from "axios";
 export class Client implements IClient {
     private readonly _axios: Axios;
 
-    constructor(apiKey: string, baseUrl: string, retries: number = 1) {
+    constructor(apiKey: string, baseUrl: string, retries = 1) {
         this._axios = axios.create({
             baseURL: baseUrl,
-            // See https://github.com/axios/axios/issues/4184, the fix is currently in the 1.0-alpha release
-            // so let's just ignore it until that gets out of alpha
-            // @ts-ignore
+            // @ts-expect-error: see https://github.com/axios/axios/issues/4184 the fix is currently 
+            // in the 1.0-alpha release so let's just ignore it until that gets out of alpha
             headers: { common: {"x-api-key": apiKey }}
         });
 
         // wrap methods with retry logic
-        function shouldRetry(reason: any): boolean {
+        function shouldRetry(reason: unknown): boolean {
             if (axios.isAxiosError(reason)) {
                 // Only retry for 5xx responses
                 return reason.response.status >= 500;
