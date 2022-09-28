@@ -7,15 +7,15 @@
  * @returns A new function that will return a promise that will resolve if `fn` returns a sucessfully resolving promise within `retries` attempts, 
  * otherwise it will be rejected
  */
-export default function retry<T>(fn: (...args: any[]) => Promise<T>, retries: number, shouldRetry?: (failure: any) => boolean): (...args: any) => Promise<T>
+export default function retry<T>(fn: (...args: unknown[]) => Promise<T>, retries: number, shouldRetry?: (failure: unknown) => boolean): (...args: unknown[]) => Promise<T>
 {
-    return async function(...args: any){
-        shouldRetry = shouldRetry || (_ => true);
+    return async function(...args: unknown[]){
+        shouldRetry = shouldRetry || (() => true);
         for (let i = 0; i < retries; ++i) {
             try {
                 return await fn(...args);
             }
-            catch (e: any) {
+            catch (e: unknown) {
                 if (!shouldRetry(e)) {
                     throw e;
                 }

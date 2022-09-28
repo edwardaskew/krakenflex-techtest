@@ -13,7 +13,7 @@ export interface SiteInfo {
 
 export interface EnhancedOutage extends Outage {
     name: string;
-};
+}
 
 export interface IClient {
     getOutages(): Promise<Outage[]>;
